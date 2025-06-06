@@ -14,13 +14,11 @@ import { Provider } from 'react-redux';
 // const store = createStore(reducer, applyMiddleware(sagaMiddleware));
 const App = () => (
   <Provider>
-    <LanguageReducer>
-      <BrowserRouter>
-        <div>
-          page
-        </div>
-      </BrowserRouter>
-    </LanguageReducer>
+    <BrowserRouter>
+      <div>
+        page
+      </div>
+    </BrowserRouter>
   </Provider>
 );
 export default App;

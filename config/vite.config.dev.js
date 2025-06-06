@@ -1,6 +1,8 @@
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
+import autoprefixer from 'autoprefixer';
+
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -32,7 +34,7 @@ export default {
             css: {
                 postcss: {
                     plugins: [
-                        require('autoprefixer')({
+                        autoprefixer({
                             overrideBrowserslist: [
                                 '>1%',
                                 'last 4 versions',

@@ -20,8 +20,11 @@ const env = {
 const configPath = env.PRODUCT_OPTION === 'com'
     ? './config/vite.config.prd.js'
     : './config/vite.config.dev.js';
+console.log(configPath);
 
-const config = await import(configPath);
+const config = await import(new URL(configPath, import.meta.url).href);
+console.log(config);
 
 // https://vitejs.dev/config/
-export default defineConfig(config);
+export default defineConfig(config.default);
+
