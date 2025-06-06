@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
@@ -16,71 +16,12 @@ const env = {
     PRODUCT_OPTION: process.env.PRODUCT_OPTION || '',
 };
 
+// Import configuration based on PRODUCT_OPTION
+const configPath = env.PRODUCT_OPTION === 'com'
+    ? './config/vite.config.prd.js'
+    : './config/vite.config.dev.js';
+
+const config = await import(configPath);
+
 // https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [react()],
-    resolve: {
-        alias: {
-            '@': resolve(__dirname, 'src'),
-            'react-native': 'react-native-web',
-        },
-        extensions: ['.js', '.jsx', '.json'],
-    },
-    server: {
-        port: 3200,
-        open: true,
-        proxy: {
-            '/api': {
-                target: process.env.PROXY || 'http://localhost:8080',
-                changeOrigin: true,
-                secure: false,
-                ws: true,
-            },
-        },
-    },
-    build: {
-        outDir: 'build',
-        sourcemap: true,
-        rollupOptions: {
-            input: {
-                main: resolve(__dirname, 'index.html'),
-            },
-        },
-    },
-    css: {
-        preprocessorOptions: {
-            css: {
-                postcss: {
-                    plugins: [
-                        require('autoprefixer')({
-                            overrideBrowserslist: [
-                                '>1%',
-                                'last 4 versions',
-                                'Firefox ESR',
-                                'not ie < 9',
-                            ],
-                        }),
-                    ],
-                },
-            },
-        },
-    },
-    define: {
-        'process.env': {
-            NODE_ENV: JSON.stringify(env.NODE_ENV),
-            PUBLIC_URL: JSON.stringify(env.PUBLIC_URL),
-            PRODUCT_OPTION: JSON.stringify(env.PRODUCT_OPTION),
-        },
-    },
-    optimizeDeps: {
-        include: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'react-redux',
-            'redux',
-            'redux-saga',
-            'jquery',
-        ],
-    },
-});
+export default defineConfig(config);

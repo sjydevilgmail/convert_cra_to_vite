@@ -1,37 +1,59 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-// Load environment variables
-dotenv.config({ silent: true });
-
 // Get environment variables
 const env = {
-    NODE_ENV: 'development',
+    NODE_ENV: 'production',
     PUBLIC_URL: process.env.PUBLIC_URL || '',
     PRODUCT_OPTION: process.env.PRODUCT_OPTION || '',
 };
 
-export default defineConfig({
-    mode: 'development',
+export default {
+    mode: 'production',
     plugins: [
         react(),
     ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'src'),
+            '@': resolve(__dirname, '../src'),
             'react-native': 'react-native-web',
         },
         extensions: ['.js', '.jsx', '.json'],
     },
     build: {
         outDir: 'build',
-        sourcemap: true,
-
+        sourcemap: false,
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: false,
+                pure_funcs: ['console.log'],
+            },
+            output: {
+                comments: false,
+            },
+        },
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: [
+                        'react',
+                        'react-dom',
+                        'react-router-dom',
+                        'react-redux',
+                        'redux',
+                        'redux-saga',
+                        'jquery',
+                    ],
+                },
+                chunkFileNames: 'static/js/[name].[hash].js',
+                entryFileNames: 'static/js/[name].[hash].js',
+                assetFileNames: 'static/[ext]/[name].[hash].[ext]',
+            },
+        },
     },
     css: {
         preprocessorOptions: {
@@ -58,27 +80,4 @@ export default defineConfig({
             PRODUCT_OPTION: JSON.stringify(env.PRODUCT_OPTION),
         },
     },
-    optimizeDeps: {
-        include: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'react-redux',
-            'redux',
-            'redux-saga',
-            'jquery',
-        ],
-    },
-    server: {
-        port: 3200,
-        open: true,
-        proxy: {
-            '/api': {
-                target: process.env.PROXY || 'http://localhost:8080',
-                changeOrigin: true,
-                secure: false,
-                ws: true,
-            },
-        },
-    },
-});
+};
