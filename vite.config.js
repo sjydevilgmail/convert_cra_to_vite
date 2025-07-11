@@ -22,9 +22,23 @@ const configPath = env.PRODUCT_OPTION === 'com'
     : './config/vite.config.dev.js';
 console.log(configPath);
 
-const config = await import(new URL(configPath, import.meta.url).href);
-console.log(config);
+const config = await import(new URL(configPath, import.meta.url));
+// console.log(config);
 
 // https://vitejs.dev/config/
-export default defineConfig(config.default);
+export default defineConfig({
+    ...config.default,
+    esbuild: {
+        loader: 'jsx',
+        include: /src\/.*\.jsx?$/,
+        exclude: [],
+    },
+    optimizeDeps: {
+        esbuildOptions: {
+            loader: {
+                '.js': 'jsx',
+            },
+        },
+    },
+});
 

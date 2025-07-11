@@ -1,12 +1,43 @@
 # Convert CRA project to Vite
-_Exported on 6/6/2025 at 08:14:44 GMT+9 from Cursor (1.0.0)_
+
+
+## 작업 순서 절차
+1. 사용되지 소스 삭제
+1. 사용되지 않는 패키지 확인
+1. Vite로 프로젝트 생성
+1.
+
+
+## 특정 Vite 버전으로 프로젝트 생성
+- Vite 4.x 버전 사용
+```bash
+bash# 1. Vite 4로 프로젝트 생성
+npm create vite@4 my-react-app -- --template react-ts
+
+# 2. 디렉토리 이동
+cd my-react-app
+
+# 3. React 18 특정 버전 설치
+npm install react@18.2.0 react-dom@18.2.0
+npm install -D @types/react@18.2.0 @types/react-dom@18.2.0
+
+# 4. 의존성 설치
+npm install --save dotenv
+npm install --save-dev autoprefixer vitest
+
+# 5. 개발 서버 실행
+npm run dev
+```
+
+find . -name "*.jsx" -type f -print
+find . -name "*.jsx" -type f -exec bash -c 'mv "$1" "${1%.jsx}.js"' _ {} \;
 
 ---
 
 **User**
 
 convert_cra_to_vite 는 cra 로 만들어진  react 프로젝트야
-convert_cra_to_vite 프로젝트를 vite 방식으로 바꾸는 
+convert_cra_to_vite 프로젝트를 vite 방식으로 바꾸는
 
 ---
 
@@ -1097,8 +1128,8 @@ npm run start:real
 **User**
 
 개발 버전과 운여 버전의 설정파일을 만들려고 해
-개발 버전의 설정 파일은 config/webpack.config.dev.js 를 참조하여 만들고 
-운영 버전의 설정 파일은 config/webpack.config.prod.js 를 참조하여 만들어줘 
+개발 버전의 설정 파일은 config/webpack.config.dev.js 를 참조하여 만들고
+운영 버전의 설정 파일은 config/webpack.config.prod.js 를 참조하여 만들어줘
 
 ---
 
@@ -1931,7 +1962,7 @@ webpack.config.prod.js와 vite.config.prod.js를 비교하면서 주요 차이�
 
 1. **설정의 복잡성**: Vite는 Webpack보다 훨씬 간단한 설정 구조를 가지고 있습니다.
 
-2. **빌드 최적화**: 
+2. **빌드 최적화**:
    - Webpack은 다양한 플러그인을 통해 세밀한 최적화가 가능합니다.
    - Vite는 Rollup을 기반으로 하여 더 간단하면서도 효과적인 최적화를 제공합니다.
 
